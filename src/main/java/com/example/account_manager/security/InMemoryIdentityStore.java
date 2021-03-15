@@ -41,4 +41,5 @@ public class InMemoryIdentityStore
         return CredentialValidationResult.NOT_VALIDATED_RESULT;
 
     }
+
 }

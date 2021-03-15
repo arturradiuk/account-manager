@@ -1,11 +1,12 @@
-package com.example.account_manager.security;
+package com.example.account_manager.controllers;
 
-
+// controller <- endpoint <- service <- facade (service) <- entity manager
 
 import com.example.account_manager.utils.JWTGeneratorVerifier;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.security.enterprise.SecurityContext;
 import javax.security.enterprise.credential.Credential;
 import javax.security.enterprise.credential.Password;
 import javax.security.enterprise.credential.UsernamePasswordCredential;
@@ -18,14 +19,14 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.logging.Logger;
 
 @RequestScoped
 @Path("authenticate")
-public class LoginService {
+public class LoginController {
 
-    public LoginService() {
+    public LoginController() {
     }
+
 
     @Inject
     private IdentityStoreHandler identityStoreHandler;

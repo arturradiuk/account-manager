@@ -1,4 +1,4 @@
-package com.example.account_manager.services;
+package com.example.account_manager.controllers;
 
 
 import com.example.account_manager.filters.EntitySignatureValidatorFilterBinding;
@@ -8,6 +8,7 @@ import com.example.account_manager.utils.EntityIdentitySignerVerifier;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.security.enterprise.identitystore.IdentityStore;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
@@ -15,18 +16,27 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 //@RequestScoped // previous version
 @ApplicationScoped // necessary for put method
 @Path("model.account")
-public class AccountService {
+public class AccountController {
 
     @Inject
     AccountRepository accountRepository;
 
-    public AccountService() {
+    public AccountController() {
     }
+
+    @Inject
+    private javax.security.enterprise.SecurityContext eeSecurityContext;
+
+    private static final Logger logger = Logger.getLogger("com.example.account_manager.controllers.AccountController.class");
+
 
     @GET
     @Path("_self")
@@ -67,6 +77,9 @@ public class AccountService {
     @Path("{login}")
     @Produces({MediaType.APPLICATION_JSON})
     public Response find(@PathParam("login") String login) throws Exception {
+
+        logger.log(Level.INFO,""+eeSecurityContext.getCallerPrincipal().getName());
+
         Account storedAccount = accountRepository.findByLogin(login);
         if (null == storedAccount) {
             throw new Exception("Not found");
@@ -77,6 +90,7 @@ public class AccountService {
                         .calculateEntitySignature(storedAccount))
                 .build();
     }
+
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
