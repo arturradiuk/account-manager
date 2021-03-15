@@ -37,12 +37,12 @@ public class EntityIdentitySignerVerifier {
     }
 
     public static boolean verifyEntityIntegrity(String tagValue, SignableEntity entity) {
-        try {
+        try {  // todo null value checking
             final String valueFromIfMatchHeader = JWSObject.parse(tagValue).getPayload().toString(); // if match value
 
             final String valueFromEntitySignablePayload = entity.getSignablePayload(); // here we get signable payload - value that should be constant (the same in database and in received updated data)
 
-            boolean fist = validateEntitySignature(tagValue);  // if the tag value is valid due to the secret
+            boolean fist = validateEntitySignature(tagValue);  // if the tag value is valid due to the secret, check if we have created this sign
             boolean second = valueFromEntitySignablePayload.equals(valueFromIfMatchHeader); // compare payload in received entity with payload in if match header
 
             return fist && second;
