@@ -1,6 +1,6 @@
 package com.example.account_manager.controllers;
 
-// controller <- endpoint <- service <- facade (service) <- entity manager
+// controller <- endpoint [dto to business model] <- service [business logic] <- facade (service) <- entity manager
 
 import com.example.account_manager.utils.JWTGeneratorVerifier;
 

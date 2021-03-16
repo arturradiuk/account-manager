@@ -1,6 +1,6 @@
 package com.example.account_manager.utils;
 
-import com.example.account_manager.model.SignableEntity;
+import com.example.account_manager.security.SignableEntity;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;

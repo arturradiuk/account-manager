@@ -3,9 +3,11 @@ package com.example.account_manager.controllers;
 
 import com.example.account_manager.filters.EntitySignatureValidatorFilterBinding;
 import com.example.account_manager.model.Account;
+import com.example.account_manager.mok.endpoints.AccountEndpoint;
 import com.example.account_manager.repositories.AccountRepository;
 import com.example.account_manager.utils.EntityIdentitySignerVerifier;
 
+import javax.ejb.AccessLocalException;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.security.enterprise.identitystore.IdentityStore;
@@ -25,6 +27,9 @@ import java.util.logging.Logger;
 @ApplicationScoped // necessary for put method
 @Path("model.account")
 public class AccountController {
+
+    @Inject
+    private AccountEndpoint accountEndpoint;
 
     @Inject
     AccountRepository accountRepository;
@@ -78,17 +83,20 @@ public class AccountController {
     @Produces({MediaType.APPLICATION_JSON})
     public Response find(@PathParam("login") String login) throws Exception {
 
-        logger.log(Level.INFO,""+eeSecurityContext.getCallerPrincipal().getName());
+        logger.log(Level.INFO, "" + eeSecurityContext.getCallerPrincipal().getName());
 
-        Account storedAccount = accountRepository.findByLogin(login);
-        if (null == storedAccount) {
-            throw new Exception("Not found");
-        }
-        return Response.ok()
-                .entity(storedAccount)
-                .tag(EntityIdentitySignerVerifier // ETag // todo remove this
-                        .calculateEntitySignature(storedAccount))
-                .build();
+//        Account storedAccount = accountRepository.findByLogin(login);
+            Account storedAccount = accountEndpoint.getAccountByLogin(login);
+
+            if (null == storedAccount) {
+                throw new Exception("Not found");
+            }
+            return Response.ok()
+                    .entity(storedAccount)
+                    .tag(EntityIdentitySignerVerifier // ETag // todo remove this
+                            .calculateEntitySignature(storedAccount))
+                    .build();
+
     }
 
 

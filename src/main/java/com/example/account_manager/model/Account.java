@@ -2,6 +2,7 @@ package com.example.account_manager.model;
 
 
 import com.example.account_manager.adapters.SerializeStringToEmptyAdapter;
+import com.example.account_manager.security.SignableEntity;
 
 import javax.json.bind.annotation.JsonbNillable;
 import javax.json.bind.annotation.JsonbProperty;
